@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  HKWildlifeIndex
 //
-//  Created by Max Siebengartner on 26/3/2024.
+//  Created by Max Siebengartner on 23/3/2024.
 //
 
 import SwiftUI
@@ -10,52 +10,18 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-
+    @State var selection : Int = 0
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
+        TabView(selection: $selection) {
+            ScanSelectionView().tabItem { Label("Scan", systemImage: "camera.fill") }.tag(3)
+            
+            EntriesListView().tabItem { Label("Index", systemImage: "building.columns") }.tag(1)
+            
+            MapView().tabItem { Label("Map", systemImage: "map.fill") }.tag(2)
         }
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }

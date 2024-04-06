@@ -7,20 +7,47 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		500C8B322BB4273800A50EB9 /* WildlifeMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500C8B312BB4273800A50EB9 /* WildlifeMarker.swift */; };
+		500C8B342BB4317800A50EB9 /* IndexCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500C8B332BB4317800A50EB9 /* IndexCardView.swift */; };
+		500C8B362BB4444400A50EB9 /* EntriesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500C8B352BB4444400A50EB9 /* EntriesListView.swift */; };
 		508154912BB3172200A30793 /* HKWildlifeIndexApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508154902BB3172200A30793 /* HKWildlifeIndexApp.swift */; };
 		508154932BB3172200A30793 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508154922BB3172200A30793 /* ContentView.swift */; };
-		508154952BB3172200A30793 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508154942BB3172200A30793 /* Item.swift */; };
 		508154972BB3172400A30793 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508154962BB3172400A30793 /* Assets.xcassets */; };
 		5081549A2BB3172400A30793 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508154992BB3172400A30793 /* Preview Assets.xcassets */; };
+		508154A32BB317AE00A30793 /* ScanSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508154A22BB317AE00A30793 /* ScanSelectionView.swift */; };
+		508154A52BB317C200A30793 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508154A42BB317C200A30793 /* MapView.swift */; };
+		508154A72BB3181E00A30793 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508154A62BB3181E00A30793 /* CameraView.swift */; };
+		508154AB2BB3183800A30793 /* CameraModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508154A82BB3183700A30793 /* CameraModel.swift */; };
+		508154AC2BB3183800A30793 /* EntryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508154A92BB3183800A30793 /* EntryInfo.swift */; };
+		508154AD2BB3183800A30793 /* WildlifeEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508154AA2BB3183800A30793 /* WildlifeEntry.swift */; };
+		508154AF2BB3185A00A30793 /* ViewfinderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508154AE2BB3185A00A30793 /* ViewfinderView.swift */; };
+		508154B12BB318F600A30793 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508154B02BB318F600A30793 /* Camera.swift */; };
+		508154B62BB3194500A30793 /* AnimalClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 508154B32BB3194500A30793 /* AnimalClassifier.mlmodel */; };
+		508154B72BB3194500A30793 /* SpeciesIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508154B42BB3194500A30793 /* SpeciesIdentifier.swift */; };
+		508E33872BC1517100F239D2 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508E33862BC1517100F239D2 /* DetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		500C8B312BB4273800A50EB9 /* WildlifeMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WildlifeMarker.swift; sourceTree = "<group>"; };
+		500C8B332BB4317800A50EB9 /* IndexCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexCardView.swift; sourceTree = "<group>"; };
+		500C8B352BB4444400A50EB9 /* EntriesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntriesListView.swift; sourceTree = "<group>"; };
 		5081548D2BB3172200A30793 /* HKWildlifeIndex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HKWildlifeIndex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		508154902BB3172200A30793 /* HKWildlifeIndexApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKWildlifeIndexApp.swift; sourceTree = "<group>"; };
-		508154922BB3172200A30793 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		508154942BB3172200A30793 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		508154922BB3172200A30793 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = ../ContentView.swift; sourceTree = "<group>"; };
 		508154962BB3172400A30793 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		508154992BB3172400A30793 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		508154A22BB317AE00A30793 /* ScanSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanSelectionView.swift; sourceTree = "<group>"; };
+		508154A42BB317C200A30793 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		508154A62BB3181E00A30793 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		508154A82BB3183700A30793 /* CameraModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraModel.swift; sourceTree = "<group>"; };
+		508154A92BB3183800A30793 /* EntryInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntryInfo.swift; sourceTree = "<group>"; };
+		508154AA2BB3183800A30793 /* WildlifeEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WildlifeEntry.swift; sourceTree = "<group>"; };
+		508154AE2BB3185A00A30793 /* ViewfinderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewfinderView.swift; sourceTree = "<group>"; };
+		508154B02BB318F600A30793 /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
+		508154B32BB3194500A30793 /* AnimalClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = AnimalClassifier.mlmodel; sourceTree = "<group>"; };
+		508154B42BB3194500A30793 /* SpeciesIdentifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeciesIdentifier.swift; sourceTree = "<group>"; };
+		508154B82BB31AE300A30793 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		508E33862BC1517100F239D2 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,9 +80,11 @@
 		5081548F2BB3172200A30793 /* HKWildlifeIndex */ = {
 			isa = PBXGroup;
 			children = (
+				508154B82BB31AE300A30793 /* Info.plist */,
+				508154B52BB3194500A30793 /* Utils */,
+				508154A12BB3176B00A30793 /* Models */,
+				508154A02BB3176100A30793 /* Views */,
 				508154902BB3172200A30793 /* HKWildlifeIndexApp.swift */,
-				508154922BB3172200A30793 /* ContentView.swift */,
-				508154942BB3172200A30793 /* Item.swift */,
 				508154962BB3172400A30793 /* Assets.xcassets */,
 				508154982BB3172400A30793 /* Preview Content */,
 			);
@@ -68,6 +97,42 @@
 				508154992BB3172400A30793 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		508154A02BB3176100A30793 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				508154922BB3172200A30793 /* ContentView.swift */,
+				508154A22BB317AE00A30793 /* ScanSelectionView.swift */,
+				508154A42BB317C200A30793 /* MapView.swift */,
+				508154A62BB3181E00A30793 /* CameraView.swift */,
+				508154AE2BB3185A00A30793 /* ViewfinderView.swift */,
+				500C8B332BB4317800A50EB9 /* IndexCardView.swift */,
+				500C8B352BB4444400A50EB9 /* EntriesListView.swift */,
+				508E33862BC1517100F239D2 /* DetailView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		508154A12BB3176B00A30793 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				508154B02BB318F600A30793 /* Camera.swift */,
+				508154A82BB3183700A30793 /* CameraModel.swift */,
+				508154A92BB3183800A30793 /* EntryInfo.swift */,
+				508154AA2BB3183800A30793 /* WildlifeEntry.swift */,
+				500C8B312BB4273800A50EB9 /* WildlifeMarker.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		508154B52BB3194500A30793 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				508154B32BB3194500A30793 /* AnimalClassifier.mlmodel */,
+				508154B42BB3194500A30793 /* SpeciesIdentifier.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,9 +205,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				508154AD2BB3183800A30793 /* WildlifeEntry.swift in Sources */,
+				508154AF2BB3185A00A30793 /* ViewfinderView.swift in Sources */,
 				508154932BB3172200A30793 /* ContentView.swift in Sources */,
-				508154952BB3172200A30793 /* Item.swift in Sources */,
+				508154A52BB317C200A30793 /* MapView.swift in Sources */,
+				508154AC2BB3183800A30793 /* EntryInfo.swift in Sources */,
+				508154AB2BB3183800A30793 /* CameraModel.swift in Sources */,
+				508154B12BB318F600A30793 /* Camera.swift in Sources */,
+				500C8B362BB4444400A50EB9 /* EntriesListView.swift in Sources */,
 				508154912BB3172200A30793 /* HKWildlifeIndexApp.swift in Sources */,
+				508E33872BC1517100F239D2 /* DetailView.swift in Sources */,
+				508154B62BB3194500A30793 /* AnimalClassifier.mlmodel in Sources */,
+				500C8B342BB4317800A50EB9 /* IndexCardView.swift in Sources */,
+				508154B72BB3194500A30793 /* SpeciesIdentifier.swift in Sources */,
+				508154A72BB3181E00A30793 /* CameraView.swift in Sources */,
+				500C8B322BB4273800A50EB9 /* WildlifeMarker.swift in Sources */,
+				508154A32BB317AE00A30793 /* ScanSelectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,6 +357,8 @@
 				DEVELOPMENT_TEAM = GK9ARA9DRY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HKWildlifeIndex/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "HKWildlifeIndex uses the devices camera to identify wildlife in photos";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -308,6 +388,8 @@
 				DEVELOPMENT_TEAM = GK9ARA9DRY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HKWildlifeIndex/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "HKWildlifeIndex uses the devices camera to identify wildlife in photos";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

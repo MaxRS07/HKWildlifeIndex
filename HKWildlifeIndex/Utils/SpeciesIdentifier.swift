@@ -1,48 +1,78 @@
-//
-//  SpeciesIdentifier.swift
-//  HKWildlifeIndex
-//
-//  Created by Max Siebengartner on 25/3/2024.
-//
+
 
 import Foundation
 import CoreML
 import SwiftUI
+import os.log
+import CoreVideo
+import Vision
 
-let model = AnimalClassifier()
 
-func identifyAnimal(image: UIImage) -> WildlifeEntry? {
-    do {
-        guard let image = buffer(from: image) else {print("Buffer conversion failed"); return nil}
-        let prediction = try model.prediction(image: image)
-        return WildlifeIndex().entries.first(where: {$0.name == prediction.target})
-    } catch {
-        print(error)
+class SpeciesIdentifier {
+    let model : WildlifeClassifier? = try? WildlifeClassifier(configuration: MLModelConfiguration())
+    
+    func identifyAnimal(image: UIImage, completion: @escaping (Result<[VNClassificationObservation], Error>) -> Void) {
+        guard let model = model else {
+            Logger().error("Failed to initialize model")
+            return
+        }
+        guard let vnModel = try? VNCoreMLModel(for: model.model) else {
+            Logger().error("Failed to initialize vision model")
+            return
+        }
+        guard let buffer = createBuffer(from: image) else { 
+            Logger().error("Failed to create buffer")
+            return
+        }
+        do {
+            let imageClassificationRequest = VNCoreMLRequest(model: vnModel) { (request, error) in
+                if let error {
+                    completion(.failure(error))
+                }
+                if let results = request.results as? [VNClassificationObservation] {
+                    completion(.success(results))
+                }
+            }
+            let requestHandler = VNImageRequestHandler(cvPixelBuffer: buffer, orientation: .up)
+            try requestHandler.perform([imageClassificationRequest])
+
+            
+            imageClassificationRequest.imageCropAndScaleOption = .centerCrop
+        } catch {
+            completion(.failure(error))
+        }
     }
-    print("error")
-    return nil
-}
-func buffer(from image: UIImage) -> CVPixelBuffer? {
-  let attrs = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue, kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
-  var pixelBuffer : CVPixelBuffer?
-  let status = CVPixelBufferCreate(kCFAllocatorDefault, Int(image.size.width), Int(image.size.height), kCVPixelFormatType_32ARGB, attrs, &pixelBuffer)
-  guard (status == kCVReturnSuccess) else {
-    return nil
-  }
-
-  CVPixelBufferLockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
-  let pixelData = CVPixelBufferGetBaseAddress(pixelBuffer!)
-
-  let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
-  let context = CGContext(data: pixelData, width: Int(image.size.width), height: Int(image.size.height), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(pixelBuffer!), space: rgbColorSpace, bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue)
-
-  context?.translateBy(x: 0, y: image.size.height)
-  context?.scaleBy(x: 1.0, y: -1.0)
-
-  UIGraphicsPushContext(context!)
-  image.draw(in: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
-  UIGraphicsPopContext()
-  CVPixelBufferUnlockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
-
-  return pixelBuffer
+    func createBuffer(from image: UIImage) -> CVPixelBuffer? {
+        let width = Int(image.size.width)
+        let height = Int(image.size.height)
+        
+        let options: [String: Any] = [
+            kCVPixelBufferCGImageCompatibilityKey as String: true,
+            kCVPixelBufferCGBitmapContextCompatibilityKey as String: true
+        ]
+        
+        var pixelBuffer: CVPixelBuffer?
+        let status = CVPixelBufferCreate(kCFAllocatorDefault, width, height, kCVPixelFormatType_32BGRA, options as CFDictionary, &pixelBuffer)
+        
+        guard status == kCVReturnSuccess, let buffer = pixelBuffer else {
+            return nil
+        }
+        
+        CVPixelBufferLockBaseAddress(buffer, CVPixelBufferLockFlags(rawValue: 0))
+        let pixelData = CVPixelBufferGetBaseAddress(buffer)
+        
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let context = CGContext(data: pixelData, width: width, height: height, bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(buffer), space: colorSpace, bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue)
+        
+        context?.translateBy(x: 0, y: CGFloat(height))
+        context?.scaleBy(x: 1, y: -1)
+        
+        UIGraphicsPushContext(context!)
+        image.draw(in: CGRect(x: 0, y: 0, width: width, height: height))
+        UIGraphicsPopContext()
+        
+        CVPixelBufferUnlockBaseAddress(buffer, CVPixelBufferLockFlags(rawValue: 0))
+        
+        return buffer
+    }
 }

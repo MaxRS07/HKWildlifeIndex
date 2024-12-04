@@ -1,7 +1,3 @@
-/*
-See the License.txt file for this sample’s licensing information.
-*/
-
 import AVFoundation
 import CoreImage
 import UIKit
@@ -272,13 +268,26 @@ class Camera: NSObject {
             self.captureDevice = AVCaptureDevice.default(for: .video)
         }
     }
+    func modifyZoom(_ value: CGFloat) {
+        if let captureDevice = captureDevice {
+            do {
+                try captureDevice.lockForConfiguration()
+                captureDevice.videoZoomFactor = value.clamp(captureDevice.minAvailableVideoZoomFactor, captureDevice.maxAvailableVideoZoomFactor)
+                captureDevice.unlockForConfiguration()
+            } catch {
+                Logger().error("Couldn't lock for config")
+            }
+        } else {
+            self.captureDevice = AVCaptureDevice.default(for: .video)
+        }
+    }
 
     private var deviceOrientation: UIDeviceOrientation {
         var orientation = UIDevice.current.orientation
         if orientation == UIDeviceOrientation.unknown {
             orientation = UIScreen.main.orientation
         }
-        return orientation
+        return .portrait
     }
     
     @objc
@@ -287,13 +296,7 @@ class Camera: NSObject {
     }
     
     private func videoOrientationFor(_ deviceOrientation: UIDeviceOrientation) -> AVCaptureVideoOrientation? {
-        switch deviceOrientation {
-        case .portrait: return AVCaptureVideoOrientation.portrait
-        case .portraitUpsideDown: return AVCaptureVideoOrientation.portraitUpsideDown
-        case .landscapeLeft: return AVCaptureVideoOrientation.landscapeRight
-        case .landscapeRight: return AVCaptureVideoOrientation.landscapeLeft
-        default: return nil
-        }
+        return .portrait
     }
     
     func takePhoto() {
@@ -309,18 +312,10 @@ class Camera: NSObject {
             
             let isFlashAvailable = self.deviceInput?.device.isFlashAvailable ?? false
             photoSettings.flashMode = isFlashAvailable ? .auto : .off
-            photoSettings.isHighResolutionPhotoEnabled = true
             if let previewPhotoPixelFormatType = photoSettings.availablePreviewPhotoPixelFormatTypes.first {
                 photoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewPhotoPixelFormatType]
             }
             photoSettings.photoQualityPrioritization = .balanced
-            
-            if let photoOutputVideoConnection = photoOutput.connection(with: .video) {
-                if photoOutputVideoConnection.isVideoOrientationSupported,
-                    let videoOrientation = self.videoOrientationFor(self.deviceOrientation) {
-                    photoOutputVideoConnection.videoOrientation = videoOrientation
-                }
-            }
             
             photoOutput.capturePhoto(with: photoSettings, delegate: self)
         }
@@ -344,33 +339,15 @@ extension Camera: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         guard let pixelBuffer = sampleBuffer.imageBuffer else { return }
-        
-        if connection.isVideoOrientationSupported,
-           let videoOrientation = videoOrientationFor(deviceOrientation) {
-            connection.videoOrientation = videoOrientation
-        }
 
         addToPreviewStream?(CIImage(cvPixelBuffer: pixelBuffer))
     }
 }
 
-fileprivate extension UIScreen {
+extension UIScreen {
 
     var orientation: UIDeviceOrientation {
-        let point = coordinateSpace.convert(CGPoint.zero, to: fixedCoordinateSpace)
-        if point == CGPoint.zero {
-            return .portrait
-        } else if point.x != 0 && point.y != 0 {
-            return .portraitUpsideDown
-        } else if point.x == 0 && point.y != 0 {
-            return .landscapeRight //.landscapeLeft
-        } else if point.x != 0 && point.y == 0 {
-            return .landscapeLeft //.landscapeRight
-        } else {
-            return .unknown
-        }
+        return .portrait
     }
 }
-
-fileprivate let logger = Logger(subsystem: "com.apple.swiftplaygroundscontent.capturingphotos", category: "Camera")
 

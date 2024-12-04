@@ -1,15 +1,10 @@
-//
-//  DetailView.swift
-//  HKWildlifeIndex
-//
-//  Created by Max Siebengartner on 6/4/2024.
-//
 
 import Foundation
 import SwiftUI
 
 struct DetailView : View {
-    @State var entry : WildlifeEntry = WildlifeIndex().entries.first!
+    @Environment(\.presentationMode) var presentationMode
+    @State var entry : WildlifeEntry
     @State var pos : CGFloat = 0
     @State var height : CGFloat = 0
     
@@ -36,18 +31,19 @@ struct DetailView : View {
                                 }
                                 .onEnded { value in
                                     withAnimation(.easeInOut(duration: 0.1)) {
-                                        if abs(pos) < 30 {
-                                            pos = 0
-                                        } else if abs(pos) < 30 {
+                                        if abs(pos) < 50 {
                                             pos = 0
                                         }
                                     }
                                 }
                         )
+                        
+                        
                 }
                 .ignoresSafeArea()
             }
         }
+        .toolbar(.hidden, for: .tabBar)
     }
     func informationCard(geometry: GeometryProxy) -> some View {
         VStack {
@@ -56,6 +52,8 @@ struct DetailView : View {
                 .padding(.top, 8)
                 .foregroundStyle(Color(uiColor: .systemGray4))
             Text(entry.name)
+                .minimumScaleFactor(0.5)
+                .lineLimit(1)
                 .padding(.horizontal)
                 .foregroundStyle(.white)
                 .font(.title)
@@ -64,13 +62,20 @@ struct DetailView : View {
                 .padding(.top, 7)
             HStack {
                 Text(entry.latin)
-                
+                    .minimumScaleFactor(0.5)
+                    .lineLimit(1)
                     .foregroundStyle(.white)
                     .font(.title3)
-                
                     .bold()
                 Button {
-                    showingInfo.toggle()
+                    withAnimation(.easeInOut) {
+                        if pos > height - 330 {
+                            pos = height - 330
+                        }
+                    }
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        showingInfo.toggle()
+                    }
                 } label: {
                     Image(systemName: "info.circle.fill")
                         .foregroundStyle(.white)
@@ -85,17 +90,47 @@ struct DetailView : View {
                 .padding(.bottom, 20)
                 .foregroundStyle(.white)
         }
+        .overlay(alignment: .top) {
+            if showingInfo {
+                VStack {
+                    VStack {
+                        ForEach(0..<8, id: \.self) { i in
+                            HStack {
+                                Text(Classification.hierarchy[i] + ":")
+                                    .padding(.leading)
+                                    .foregroundStyle(.white)
+                                Spacer()
+                                Text(entry.classification.list[i].capitalized)
+                                    .padding(.trailing)
+                                    .foregroundStyle(.white)
+                            }
+                            
+                        }
+                    }
+                    .padding(.vertical)
+                    .frame(width: geometry.size.width * 0.6)
+                    .background(VisualEffectView(effect: UIBlurEffect(style: .dark)))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .padding(.top, 100)
+                }
+            }
+        }
         .frame(width: geometry.size.width)
         .frame(minHeight: geometry.size.height * 0.66, alignment: .topLeading)
         .background(GeometryReader { geo in
             Color.clear
                 .onAppear {
                     height = geo.size.height
-                    pos = geometry.size.height / 2
+                    pos = height/2
                 }
         })
         .background(VisualEffectView(effect: UIBlurEffect(style: .regular)))
         .clipShape(RoundedRectangle(cornerRadius: 30))
+        .gesture(TapGesture().onEnded {
+            withAnimation(.easeInOut(duration: 0.1)) {
+                showingInfo = false
+            }
+        })
     }
 }
 struct VisualEffectView: UIViewRepresentable {
@@ -110,5 +145,5 @@ struct VisualEffectView: UIViewRepresentable {
     }
 }
 #Preview {
-    DetailView()
+    DetailView(entry: WildlifeIndex().entries[0])
 }

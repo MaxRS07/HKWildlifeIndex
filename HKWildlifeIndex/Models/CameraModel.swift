@@ -1,7 +1,3 @@
-/*
-See the License.txt file for this sample’s licensing information.
-*/
-
 import AVFoundation
 import SwiftUI
 import os.log
@@ -10,8 +6,7 @@ final class CameraModel: ObservableObject {
     let camera = Camera()
     
     @Published var viewfinderImage: Image?
-    @Published var thumbnailImage: Image?
-    
+    @Published var photo: CIImage?
     var isPhotosLoaded = false
     
     init() {
@@ -22,16 +17,15 @@ final class CameraModel: ObservableObject {
     
     func handleCameraPreviews() async {
         let imageStream = camera.previewStream
-            .map { $0.image }
-
         for await image in imageStream {
             Task { @MainActor in
-                viewfinderImage = image
+                viewfinderImage = image.image
+                photo = image
             }
         }
     }
     
-    private func unpackPhoto(_ photo: AVCapturePhoto) -> PhotoData? {
+    private func unpackPhoto(_ photo: AVCapturePhoto) -> Data? {
         guard let imageData = photo.fileDataRepresentation() else { return nil }
 
         guard let previewCGImage = photo.previewCGImageRepresentation(),
@@ -45,18 +39,39 @@ final class CameraModel: ObservableObject {
         let previewDimensions = photo.resolvedSettings.previewDimensions
         let thumbnailSize = (width: Int(previewDimensions.width), height: Int(previewDimensions.height))
         
-        return PhotoData(thumbnailImage: thumbnailImage, thumbnailSize: thumbnailSize, imageData: imageData, imageSize: imageSize)
+        return imageData
+    }
+    public func setFlashlight(_ brightness: Float) {
+        guard let device = AVCaptureDevice.default(for: .video) else {
+            Logger().error("Failed to obtain video input.")
+            return
+        }
+        if device.hasTorch {
+            do {
+                try device.lockForConfiguration()
+                if brightness == 0 {
+                    device.torchMode = .off
+                } else {
+                    try device.setTorchModeOn(level: brightness)
+                }
+                device.unlockForConfiguration()
+            } catch {
+                Logger().error("\(error.localizedDescription)")
+            }
+        } else {
+            Logger().error("Device has no flashlight.")
+        }
     }
 }
 
-fileprivate struct PhotoData {
+struct PhotoData {
     var thumbnailImage: Image
     var thumbnailSize: (width: Int, height: Int)
     var imageData: Data
     var imageSize: (width: Int, height: Int)
 }
 
-fileprivate extension CIImage {
+ extension CIImage {
     var image: Image? {
         let ciContext = CIContext()
         guard let cgImage = ciContext.createCGImage(self, from: self.extent) else { return nil }
@@ -64,7 +79,7 @@ fileprivate extension CIImage {
     }
 }
 
-fileprivate extension Image.Orientation {
+ extension Image.Orientation {
 
     init(_ cgImageOrientation: CGImagePropertyOrientation) {
         switch cgImageOrientation {
@@ -79,5 +94,3 @@ fileprivate extension Image.Orientation {
         }
     }
 }
-
-fileprivate let logger = Logger(subsystem: "com.apple.swiftplaygroundscontent.capturingphotos", category: "DataModel")

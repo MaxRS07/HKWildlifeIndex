@@ -1,32 +1,47 @@
-//
-//  EntryInfo.swift
-//  HKWildlifeIndex
-//
-//  Created by Max Siebengartner on 23/3/2024.
-//
 
 import Foundation
 import SwiftUI
 
-public struct Classification {
+public struct Classification : Hashable {
     var domain: Domain
     var kingdom: Kingdom
     var phylum: Phylum
     var subphylum: Subphylum
     var classification: String
     var order: String
-    var infraorder: String
     var genus: String
     var family: String
     
-    init(domain: Domain, kingdom: Kingdom, phylum: Phylum, subphylum: Subphylum, classification: String, order: String, infraorder: String, family: String, genus: String) {
+    var list : [String] {
+       return [
+        domain.rawValue,
+        kingdom.rawValue,
+        phylum.rawValue,
+        subphylum.rawValue,
+        classification,
+        order,
+        genus,
+        family,
+        ]
+    }
+    static var hierarchy : [String] = [
+        "Domain",
+        "Kingdom",
+        "Phylum",
+        "Subphylum",
+        "Classification",
+        "Order",
+        "Genus",
+        "Family"
+    ]
+    
+    init(domain: Domain, kingdom: Kingdom, phylum: Phylum, subphylum: Subphylum, classification: String, order: String, family: String, genus: String) {
         self.domain = domain
         self.kingdom = kingdom
         self.phylum = phylum
         self.subphylum = subphylum
         self.classification = classification
         self.order = order
-        self.infraorder = infraorder
         self.family = family
         self.genus = genus
     }
@@ -37,75 +52,76 @@ public struct Classification {
                               subphylum: subphylum ?? self.subphylum,
                               classification: classification ?? self.classification,
                               order: order ?? self.order,
-                              infraorder: infraorder ?? self.infraorder,
                               family: family ?? self.family,
                               genus: genus ?? self.genus)
     }
     static func insecta(order: String, infraorder: String, family : String, genus: String) -> Self {
-        return Classification(domain: .Eukaryota, kingdom: .animalia, phylum: .arthropoda, subphylum: .none, classification: "insecta", order: order, infraorder: infraorder, family: family, genus: genus)
+        return Classification(domain: .eukaryota, kingdom: .animalia, phylum: .arthropoda, subphylum: .none, classification: "insecta", order: order, family: family, genus: genus)
     }
-    static func aranae(infraorder: String, family: String, genus: String) -> Self { Classification(domain: .Eukaryota, kingdom: .animalia, phylum: .arthropoda, subphylum: .chelicerata, classification: "arachnida", order: "aranae", infraorder: infraorder, family: family, genus: genus)
+    static func aranae(infraorder: String, family: String, genus: String) -> Self { Classification(domain: .eukaryota, kingdom: .animalia, phylum: .arthropoda, subphylum: .chelicerata, classification: "arachnida", order: "aranae", family: family, genus: genus)
     }
     
     static func nymphalidae(genus: String) -> Self { .insecta(order: "lepidoptera", infraorder: "", family: "nymphalidae", genus: genus)
     }
-    static func mammalia(order: String, infraorder: String, family: String, genus: String) -> Self {
-        Classification(domain: .Eukaryota, kingdom: .animalia, phylum: .chordata, subphylum: .none, classification: "mammalia", order: order, infraorder: infraorder, family: family, genus: genus)
+    static func mammalia(order: String, family: String, genus: String) -> Self {
+        Classification(domain: .eukaryota, kingdom: .animalia, phylum: .chordata, subphylum: .none, classification: "mammalia", order: order, family: family, genus: genus)
     }
     static func ant(genus: String) -> Self {
         return .insecta(order: "Hymenoptera", infraorder: "", family: "Formicidae", genus: genus)
     }
+    static func aves(order: String, family: String, genus: String) -> Self {
+        return Classification(domain: .eukaryota, kingdom: .animalia, phylum: .chordata, subphylum: .none, classification: "Aves", order: order, family: family, genus: genus)
+    }
 }
-enum Domain {
-    case bacteria
-    case Archaea
-    case Eukaryota
+enum Domain : String {
+    case bacteria = "bacteria"
+    case archaea = "archaea"
+    case eukaryota = "eukaryota"
 }
-enum Kingdom {
-    case animalia
-    case plantae
-    case fungi
-    case protista
-    case eubacteria
-    case archaebacteria
+enum Kingdom : String {
+    case animalia = "animalia"
+    case plantae = "plantae"
+    case fungi = "fungi"
+    case protista = "protista"
+    case eubacteria = "eubacteria"
+    case archaebacteria = "archaebacteria"
 }
-enum Phylum {
-    case porifera
-    case cnidaria
-    case platyhelminthe
-    case nematoda
-    case annelida
-    case arthropoda
-    case mollusca
-    case echinodermata
-    case chordata
+enum Phylum : String {
+    case porifera = "porifera"
+    case cnidaria = "cnidaria"
+    case platyhelminthe = "platyhelminthe"
+    case nematoda = "nematoda"
+    case annelida = "annelida"
+    case arthropoda = "arthropoda"
+    case mollusca = "mollusca"
+    case echinodermata = "echinodermata"
+    case chordata = "chordata"
 }
-enum Subphylum {
-    case vertebrates
-    case tunicates
-    case cephalochordates
-    case arthropods
-    case annelids
-    case mollusks
-    case echinoderms
-    case hemichordates
-    case chordates
-    case nematodes
-    case platyhelminthes
-    case cnidarians
-    case poriferans
-    case ctenophores
-    case placozoans
-    case chelicerata
+enum Subphylum : String {
+    case vertebrates = "vertebrates"
+    case tunicates = "tunicates"
+    case cephalochordates = "cephalochordates"
+    case arthropods = "arthropods"
+    case annelids = "annelids"
+    case mollusks = "mollusks"
+    case echinoderms = "echinoderms"
+    case hemichordates = "hemichordates"
+    case chordates = "chordates"
+    case nematodes = "nematodes"
+    case platyhelminthes = "platyhelminthes"
+    case cnidarians = "cnidarians"
+    case poriferans = "poriferans"
+    case ctenophores = "ctenophores"
+    case placozoans = "placozoans"
+    case chelicerata = "chelicerata"
     case none
 }
-enum Rarity : CaseIterable {
+enum Rarity : CaseIterable, Hashable {
     case common
     case uncommon
     case rare
     case epic
     case legendary
-    case mythic
 }
 extension Rarity {
     var textView : RarityViewBuilder {
@@ -120,8 +136,6 @@ extension Rarity {
             return .init(name: "Epic", color: .purple, background: 0.6)
         case .legendary:
             return .init(name: "Legendary", color: .yellow, background: 0.8)
-        case .mythic:
-            return .init(name: "Mythic", color: .red, background: 0.65)
         }
     }
 }

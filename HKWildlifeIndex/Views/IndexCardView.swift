@@ -1,15 +1,11 @@
-//
-//  IndexCardView.swift
-//  HKWildlifeIndex
-//
-//  Created by Max Siebengartner on 27/3/2024.
-//
+
 
 import Foundation
 import SwiftUI
 
 struct IndexCardView : View {
     @State var entry : WildlifeEntry
+    @State var discovered : Bool = true
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -19,11 +15,11 @@ struct IndexCardView : View {
                     .frame(width: geometry.size.width, height: geometry.size.height * 0.5, alignment: .top)
                     .clipped()
                 VStack {
-                    Text(entry.name)
+                    Text(discovered ? entry.name : "???")
                         .foregroundStyle(.black)
                         .frame(width: geometry.size.width * 0.9, alignment: .topLeading)
                         .bold()
-                    Text(entry.latin)
+                    Text(discovered ? entry.latin : "???")
                         .frame(width: geometry.size.width * 0.9, alignment: .topLeading)
                         .foregroundStyle(Color(uiColor: .systemGray2))
                 }
@@ -51,7 +47,7 @@ struct IndexCardView : View {
 #Preview {
     ScrollView(.horizontal) {
         HStack {
-            ForEach(WildlifeIndex().entries) {entry in
+            ForEach(WildlifeIndex().entries, id: \.self) {entry in
                 IndexCardView(entry: entry)
                     .frame(width: 165, height: 200)
                     .background(.blue)

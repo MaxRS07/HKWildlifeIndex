@@ -1,9 +1,4 @@
-//
-//  CameraOutputView.swift
-//  HKWildlifeIndex
-//
-//  Created by Max Siebengartner on 26/3/2024.
-//
+
 
 import Foundation
 import SwiftUI
@@ -14,8 +9,10 @@ struct ViewfinderView : View {
         GeometryReader { geo in
             image?
                 .resizable()
-                .frame(width: geo.size.width, height: geo.size.height)
+                .aspectRatio(contentMode: .fit)
+                .rotationEffect(.degrees(90))
                 .scaledToFill()
+                .frame(width: geo.size.width, height: geo.size.height)
         }
     }
 }
